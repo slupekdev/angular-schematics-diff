@@ -1,0 +1,73 @@
+name: 2.0.$(BuildID)
+
+trigger:
+- '*'
+-  '*/*'
+
+pool:
+  name: Hosted VS2017
+  demands:
+  - msbuild
+  - visualstudio
+  - vstest
+
+steps:
+- task: Npm@1
+  displayName: 'Install dependencies'
+  inputs:
+    command: custom
+    workingDir: '.'
+    verbose: false
+    customCommand: ci
+
+- task: Npm@1
+  displayName: 'Build'
+  inputs:
+    command: custom
+    workingDir: '.'
+    verbose: false
+    customCommand: 'run build -- --prod --aot -vc -cc --buildOptimizer'
+
+- task: Npm@1
+  displayName: 'Run unit tests'
+  inputs:
+    command: custom
+    workingDir: '.' 
+    verbose: false
+    customCommand: 'run test -- --watch=false --code-coverage --no-progress --source-map=false --browsers=ChromeHeadlessCI'
+
+- task: PublishTestResults@2
+  displayName: 'Publish unit test results'
+  inputs:
+    testResultsFormat: JUnit
+    testResultsFiles: '**/TESTS-*.xml'
+    mergeTestResults: true
+    testRunTitle: 'wwwroot tests'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: './coverage/sandbox/cobertura-coverage.xml'
+
+- task: Npm@1
+  displayName: 'Run lint'
+  inputs:
+    command: custom
+    workingDir: '.' 
+    verbose: false
+    customCommand: 'run lint'
+  continueOnError: true
+
+- task: ArchiveFiles@2
+  displayName: 'Archive'
+  inputs:
+    rootFolderOrFile: './dist/sandbox'
+    includeRootFolder: false
+    archiveFile: '$(Build.ArtifactStagingDirectory)/sandbox.zip'
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact'
+  inputs:
+    PathtoPublish: '$(build.artifactstagingdirectory)'
+    ArtifactName: 'sandbox'
