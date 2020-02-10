@@ -17,7 +17,15 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "@sandbox/*": [
+        "projects/sandbox/src/app/*"
+      ],
+      "@sandbox-env/*": [
+        "projects/sandbox/src/environments/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

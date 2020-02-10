@@ -28,9 +28,15 @@
               "projects/sandbox/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/sandbox/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/sandbox/src/app/scss"
+              ]
+            }
           },
           "configurations": {
             "production": {
@@ -93,9 +99,15 @@
               "projects/sandbox/src/assets"
             ],
             "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "projects/sandbox/src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "projects/sandbox/src/app/scss"
+              ]
+            }
           }
         },
         "lint": {
@@ -246,7 +258,8 @@
           }
         }
       }
-    }},
+    }
+  },
   "cli": {
     "packageManager": "yarn"
   },
